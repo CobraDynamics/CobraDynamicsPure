@@ -10,6 +10,8 @@ technical skills to a new level! 🚀
 
 ## Table of Contents
 
+[Install Requirements](https://github.com/CobraDynamics/CobraDynamicsPure/tree/master#install-requirements)
+
 ## How to install and Run the Project
 
 ### Cloning the Project and cd into it
