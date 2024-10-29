@@ -10,6 +10,7 @@ technical skills to a new level! 🚀
 
 ## Table of Contents
 
+[How to install and Run the Project](https://github.com/CobraDynamics/CobraDynamicsPure/tree/master#how-to-install-and-run-the-project)
 [Install Requirements](https://github.com/CobraDynamics/CobraDynamicsPure/tree/master#install-requirements)
 
 ## How to install and Run the Project
@@ -27,8 +28,6 @@ git clone https://github.com/CobraDynamics/CobraDynamicsPure \
 python3 -m venv venv/
 ```
 
-## How to Use the Project
-
 ### Avtivate the Virtual Envireonment
 
 ```bash
@@ -40,14 +39,4 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
-
-## Include Credits
-
-## Add a License
-
-## Badges
-
-## How to Contribute to the Project
-
-##  Include Tests
 
