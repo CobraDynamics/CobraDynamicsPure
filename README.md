@@ -10,7 +10,7 @@
 
 ```bash
 git clone https://github.com/CobraDynamics/CobraDynamicsPure \
-cd CobraDynamicsPure
+&& cd CobraDynamicsPure
 ```
 
 ### Create Python Virtual Environment
