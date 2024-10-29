@@ -3,10 +3,12 @@ import gc
 import detect_gesture as g
 import motor_control2 as mc #########--temporär version 2 von motor_control
 import detect_object as do 
+import audio_ctrl as ac
 
     
 
 def main():
+    ac.play_file("connected/connected.mp3")
     cap = Picamera2()  # Create an instance of Picamera2
     #cap = cv2.VideoCapture(-1) # use for any camera
     ##############################
