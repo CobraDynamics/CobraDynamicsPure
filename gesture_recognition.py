@@ -1,6 +1,11 @@
 """
-Funktion zur Gestenerkennung, die einen int-Wert zurückgibt, um die Suche nach einem Ball
+CobraDynamics
+Jan Hildebrandt
+Oct 2024
+
+Kurzbeschreibung: Funktion zur Gestenerkennung, die einen int-Wert zurückgibt, um die Suche nach einem Ball auszulösen
 """
+
 import cv2
 import mediapipe as mp
 from flask import Flask, Response
@@ -142,5 +147,8 @@ def gesture_trigger(landmarks, mpHandss):
     if gesture == None and three and from_all_in == True and not from_all_out == True:
         gesture = 2 # 2 = Count up
 
-
+    # Returnwert gibt eine Ganzzahl (int) zurück
+    # 1 = Thumbs up
+    # 2 = Count up
+    # 3 = Count down
     return gesture
