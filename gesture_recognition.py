@@ -1,9 +1,9 @@
 """
-CobraDynamics
-Jan Hildebrandt
-Oct 2024
+    CobraDynamics / Oct 2024
+    
+    Jan Hildebrandt (https://github.com/abracodedabra)
 
-Kurzbeschreibung: Funktion zur Gestenerkennung, die einen int-Wert zurückgibt, um die Suche nach einem Ball auszulösen
+    Kurzbeschreibung: Funktion zur Gestenerkennung, die einen int-Wert zurückgibt, um die Suche nach einem Ball auszulösen
 """
 
 import cv2
