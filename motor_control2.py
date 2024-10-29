@@ -7,7 +7,6 @@ Oct 2024
 """
 
 import time
-import detect_object as do
 from base_ctrl import BaseController
 
 MIN_DISTANCE = 340 # 20 cm distance
