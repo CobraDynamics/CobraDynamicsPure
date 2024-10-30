@@ -72,13 +72,20 @@ def main():
                     gesture = gr.gesture_trigger(handLms.landmark, mpHands)
 
                     if gesture:
+                        bild_text = 'Thumbs up' if gesture == 1 else 'Count to three' if gesture == 2 else 'Count down'
                         cv2.putText(frame_flipped_bgr, str(gesture), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 
                                     0.75, (0, 255, 0), 2, cv2.LINE_AA)
                         print("Successful initialization by hand gesture: ", str(gesture))
                         is_gesture_initialized = True
                         #gr.hands.close() # kein Attribut hands
-                        #del gr.hands     # "
+                        
+                        # Zurücksetzen der Schalter-Variablen für die Erkennung der nächsten Geste
                         gr.gesture = None
+                        gr.from_all_out = None 
+                        gr.from_all_in = None 
+                        gr.from_thumb_up = None 
+                        gr.from_three_down = None 
+                        gr.from_thumb_down = None 
                         
         else:
             #image = process_image(image)
