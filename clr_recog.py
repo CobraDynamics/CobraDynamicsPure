@@ -2,7 +2,10 @@ import cv2
 import numpy as np
 from ball_shape import confirm_ballshape
 
+
 def color_recog(img, color):
+    #debugging
+    bug = "nix"
     # Standardwerte für den Fall, dass keine Konturen gefunden werden
     largest_contour = None
     cx = -1
@@ -15,12 +18,17 @@ def color_recog(img, color):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
     # Farbgrenzen für die Erkennung des blauen Balls definieren
-    lower_blue = np.array([120, 255, 220])  # Untere Grenze für blau
-    upper_blue = np.array([90, 120, 90])  # Obere Grenze für blau
+    #lower_blue = np.array([120, 255, 220])  # Untere Grenze für blau
+    #upper_blue = np.array([90, 120, 90])  # Obere Grenze für blau
+    lower_blue = np.array([100, 150, 50])  # Niedrigere Schwellenwerte für Blau
+    upper_blue = np.array([140, 255, 255]) # Obere Schwellenwerte für Blau
 
     # Farbgrenzen für die Erkennung des grünen Balls definieren
+    #lower_green = np.array([35, 100, 100])  # Untere Grenze für grün
+    #upper_green = np.array([80, 255, 255])  # Obere Grenze für grün
     lower_green = np.array([35, 100, 100])  # Untere Grenze für grün
     upper_green = np.array([80, 255, 255])  # Obere Grenze für grün
+
 
     # Farbgrenzen für die Erkennung des roten Balls definieren
     lower_red = np.array([157, 144, 49])
@@ -38,7 +46,7 @@ def color_recog(img, color):
         color_lower = lower_red
 
     # Maske erstellen, die nur die gewünschten farbigen Bereiche zeigt
-    mask = cv2.inRange(hsv, color_lower, color_upper)
+    mask = cv2.inRange(hsv, color_lower, color_upper)        
 
     # Konturen finden
     if color == "red":
@@ -46,12 +54,12 @@ def color_recog(img, color):
         contours, _ = cv2.findContours(maskRed, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     else:
         contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
-    print(len(contours))
+        bug = str(np.mean(mask))
 
     # Wenn Konturen gefunden werden, zeichne sie auf das Bild
     if contours:
         # Größte Kontur auswählen
+        bug = "contours ja"
         largest_contour = max(contours, key=cv2.contourArea)
         # Berechne den Mittelpunkt der Kontur
         M = cv2.moments(largest_contour)
@@ -78,4 +86,4 @@ def color_recog(img, color):
         cy = -1
 
     # Rückgabe der Werte
-    return largest_contour, cx, cy, img
+    return largest_contour, cx, cy, img, bug, mask

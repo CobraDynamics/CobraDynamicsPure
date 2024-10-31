@@ -16,6 +16,9 @@ import clr_recog as cr #detect_object
 from picamera2 import Picamera2  # Library for accessing Raspberry Pi Camera
 from flask import Flask, Response # Library für Videostreaming über Websever
 import mediapipe as mp
+import audio_ctrl as ac
+import numpy as np
+import dancer as d
 
 # Flask-Anwendung erstellen
 app = Flask(__name__)    
@@ -35,7 +38,7 @@ def main():
     ##############################
     # COLOR ###############################################################
     #========= Variablen ##################################################
-    colorlist = ["blue","green","red"]
+    colorlist = ["blue","green","red", "rainbow"]
     found_counter = 0 # inkrement nach jedem erfolgreichen Fund -> bestimmt nächste Farbe
     color = colorlist[found_counter]
     # gesture = 1 # Ist nur zum grundlegenden Test ohne gesture_recognition()
@@ -43,17 +46,21 @@ def main():
 
 
     ##############################
-    is_gesture_initialized = False
+    #is_gesture_initialized = False
+    is_gesture_initialized = False # für test, um in else-Teile der Schleife zu springen
+    #gesture = 3 # für test ohne gesture
     is_found = False
 
     while True:
         # Lesen Sie ein Bild oder Video von der Kamera
         
 
-        #ret, image = cap.read()
+        #ret, image = cap.read()deactivate
         
-        image = cap.capture_array("main") # Capture a frame from the camera
+        image = cap.capture_array("main") # Capture a frame from the camera # "main" entfernt zum testen
         # image = cv2.resize(image, (640, 480)) # resize img size / wird eigentlich oben in cap.configure schon festgelegt
+        results = None
+        #print("Bildgröße v:", image.shape)
         if not is_gesture_initialized:            
             frame_flipped = cv2.flip(image, 1)
             img_rgb = cv2.cvtColor(frame_flipped, cv2.COLOR_BGR2RGB)
@@ -64,56 +71,77 @@ def main():
 
             # Wenn Handlandmarks erkannt wurden
             if results.multi_hand_landmarks:
-
+                #mpHands = None
                 for handLms in results.multi_hand_landmarks:
                     # Zeichne Handlandmarks und Verbindungen auf das BGR-Frame
                     mpDraw.draw_landmarks(frame_flipped_bgr, handLms, mpHands.HAND_CONNECTIONS)
                     # Führe die Gestenerkennung durch und schreibe das Ergebnis auf das Frame
                     gesture = gr.gesture_trigger(handLms.landmark, mpHands)
+                
 
                     if gesture:
+                        ac.play_file("Here_We_Go/Here_We_Go.mp3")
                         bild_text = 'Thumbs up' if gesture == 1 else 'Count to three' if gesture == 2 else 'Count down'
-                        cv2.putText(frame_flipped_bgr, str(gesture), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 
+                        cv2.putText(frame_flipped_bgr, bild_text, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 
                                     0.75, (0, 255, 0), 2, cv2.LINE_AA)
                         print("Successful initialization by hand gesture: ", str(gesture))
                         is_gesture_initialized = True
                         #gr.hands.close() # kein Attribut hands
-                        
-                        # Zurücksetzen der Schalter-Variablen für die Erkennung der nächsten Geste
-                        gr.gesture = None
-                        gr.from_all_out = None 
-                        gr.from_all_in = None 
-                        gr.from_thumb_up = None 
-                        gr.from_three_down = None 
-                        gr.from_thumb_down = None 
+                        #del gr.hands     # "
+                        #gr.gesture = None
+                        #gr.from_all_out = None 
+                        #gr.from_all_in = None 
+                        #gr.from_thumb_up = None 
+                        #gr.from_three_down = None 
+                        #gr.from_thumb_down = None
+
                         
         else:
             #image = process_image(image)
             #x, y = do.find_object(image)
             #--------------------------
+            
+            color = colorlist[found_counter]
             if found_counter < gesture:
                 #is_found, found_counter = bg.get_ball(img, color, found_counter)  # get_ball (img, color)
                 #schleife color_recog + motor_control
-                _, cx, cy, image, käfer = cr.color_recog(image, color) #1. Parameter "largest_contour" wird hier nicht benötigt
-                print("Käfer: ", käfer)
+                is_found = False
+                largest_contour, cx, cy, image, bug, mask = cr.color_recog(image, color) #1. Parameter "largest_contour" wird hier nicht benötigt
                 
-                is_found = mc.motor_control(cx, cy)
+                is_found = False
+                print("mc vor: ", is_found)
+                print(color)
+                is_found = mc.motor_control(cx, cy) 
+                print("mc: ", is_found)
                 if is_found == True:
+                    ac.play_file("Mario_Coin/Mario_Coin.mp3")
                     found_counter += 1
-                    is_found = False
                     
-                
+                #print("Maske: ", len(mask))
+                #print("Bildgröße n:", image.shape)
+                #print("Durchschnittswert der Maske:", np.mean(mask))
                 print("Found-Counter: ", found_counter)
+                #print("bug: ", bug)
                 
             elif found_counter == gesture:
-                happy = happy_dance()
-                print(happy)
-                initialized = False # start again
+ 
+                #happy = d.happy_dance()
+                print("happy")
+                is_gesture_initialized = False # start again
                 #break # statt Programm zu beenden, wieder auf Geste warten
+            frame_flipped_bgr = image
+            gr.gesture = None
+            gr.from_all_out = None 
+            gr.from_all_in = None 
+            gr.from_thumb_up = None 
+            gr.from_three_down = None 
+            gr.from_thumb_down = None
+            gr.hands = None
+            gr.landmarks = None
     #---nach der Schleife -----------------------
 
         # Kodierung des Frames im JPEG-Format für MJPEG-Streaming
-        ret, buffer = cv2.imencode('.jpg', frame_flipped_bgr)
+        ret, buffer = cv2.imencode('.jpg', frame_flipped_bgr) 
         frame = buffer.tobytes()
         
         # Erzeuge einen HTTP-Response mit dem Frame-Datenstrom im MJPEG-Format
