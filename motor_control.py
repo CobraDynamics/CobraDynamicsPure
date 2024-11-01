@@ -7,7 +7,6 @@ Oct 2024
 """
 
 import time
-import clr_recog as cr #detect_object
 from base_ctrl import BaseController
 
 MIN_DISTANCE = 340 # 20 cm distance
@@ -21,7 +20,6 @@ NONE_COORDINATE = -1
 
 # Raspberry Pi 5 not supported
 base = BaseController('/dev/serial0', 115200)
-
 
 """
 Standard commands for controlling the rover
@@ -59,7 +57,6 @@ def motor_test():
     base.send_command({"T":1,"L":0.2,"R":0.2})
     time.sleep(2)
     base.send_command({"T":1,"L":0,"R":0})
-    #print("motor ctrl test")
 
 
 def motor_control(cx, cy):
@@ -89,7 +86,7 @@ def motor_control(cx, cy):
         time.sleep(2)
     else:
         """
-        Alignment to the object takes place here
+        Alignment to the object
         """
         if cx < LIMT_LEFT:
             rotate_left()

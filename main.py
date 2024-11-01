@@ -11,7 +11,7 @@
 import cv2
 import gc # garbage collector
 import gesture_recognition as gr #detect_gesture
-import motor_control2 as mc #########--temporär version 2 von motor_control
+import motor_control as mc #########--temporär version 2 von motor_control
 import clr_recog as cr #detect_object
 from picamera2 import Picamera2  # Library for accessing Raspberry Pi Camera
 from flask import Flask, Response # Library für Videostreaming über Websever
