@@ -16,9 +16,6 @@ src/version.ts
 ui-tests/test-results/
 ui-tests/playwright-report/
 
-# Created by https://www.gitignore.io/api/python
-# Edit at https://www.gitignore.io/?templates=python
-
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -116,8 +113,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# End of https://www.gitignore.io/api/python
 
 # OSX files
 .DS_Store
